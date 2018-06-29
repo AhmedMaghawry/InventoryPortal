@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@color/dilg_bg">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="25sp"
+        android:textColor="@color/white"
+        tools:text="@string/dumy"
+        android:id="@+id/desc_tv"
+        android:paddingTop="40dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"/>
+
+    <EditText
+        android:id="@+id/input_et"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/bg_light"
+        android:textCursorDrawable="@null"
+        android:textSize="20sp"
+        tools:hint="@string/dumy" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="7dp"
+            android:textSize="15sp"
+            android:text="@string/cancel"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:id="@+id/cancel"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="7dp"
+            android:textSize="15sp"
+            android:text="@string/ok"
+            android:background="@color/green"
+            android:textColor="@color/white"
+            android:id="@+id/ok"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="15sp"
+        android:textColor="@color/red"
+        android:text="@string/wrong"
+        android:id="@+id/wrong"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+</LinearLayout>

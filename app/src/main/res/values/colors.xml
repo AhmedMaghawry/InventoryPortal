@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="bg_light">#dd1d9bf5</color>
+    <color name="bg_dark">#dd093250</color>
+    <color name="bg">#dd9ed8e4</color>
+    <color name="trns">#00ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="dilg_bg">#e4aa9e</color>
+    <color name="red">#e93333</color>
+    <color name="green">#5eca5e</color>
+    <color name="good_green">#d8e49e</color>
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#727272</color>
+    <color name="actionbarOpacity">#33000000</color>
+</resources>
