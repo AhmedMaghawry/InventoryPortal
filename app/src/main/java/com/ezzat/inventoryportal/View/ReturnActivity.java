@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ezzat.inventoryportal.Model.Item;
+import com.ezzat.inventoryportal.Model.Items;
 import com.ezzat.inventoryportal.R;
 
 public class ReturnActivity extends AppCompatActivity {
@@ -32,14 +34,16 @@ public class ReturnActivity extends AppCompatActivity {
     private ImageButton wrong;
     private ImageButton right;
     private String idUser;
-    private String idItem;
+    private Items items;
+    private Item item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return);
         idUser = getIntent().getStringExtra("id");
-        idItem = getIntent().getStringExtra("item");
+        item = (Item) getIntent().getSerializableExtra("item");
+        items = (Items) getIntent().getSerializableExtra("items");
         setupViews();
         setupActions();
         setupToolbar();
@@ -58,9 +62,8 @@ public class ReturnActivity extends AppCompatActivity {
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String itmID = itemNum.getText().toString();
-                String quan = itemQuan.getText().toString();
-                //ToDo: Check if in table
+                items.updateItemID(item.getItemNumber(), itemNum.getText().toString(), getApplicationContext());
+                items.saveItems(getApplicationContext());
                 goToHome();
             }
         });
@@ -69,25 +72,31 @@ public class ReturnActivity extends AppCompatActivity {
     private void goToHome() {
         Intent intent = new Intent(ReturnActivity.this, HomeActivity.class);
         intent.putExtra("id", idUser);
+        intent.putExtra("items", items);
         startActivity(intent);
         finish();
     }
 
     private void setupViews() {
-        //TODO: Add values to views
         itemNum = findViewById(R.id.itm);
-        if (idItem != null) {
-            itemNum.setText(idItem);
-        }
+        itemNum.setText(item.getItemNumber());
         itemQuan = findViewById(R.id.qn);
+        itemQuan.setText(item.getQuan());
         wrong = findViewById(R.id.cross);
         right = findViewById(R.id.tick);
         binLoc = findViewById(R.id.bin);
+        binLoc.setText(item.getBin());
     }
 
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToHome();
+            }
+        });
         final ActionBar ab = getSupportActionBar();
         if(ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);

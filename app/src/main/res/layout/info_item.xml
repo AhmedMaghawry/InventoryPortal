@@ -16,6 +16,7 @@
             android:textColor="@color/white"
             android:backgroundTint="@color/bg_light"
             android:textSize="20sp"
+            android:inputType="number"
             android:textColorHint="@color/bg_light"
             android:id="@+id/itm_num"/>
         <TextView
@@ -25,7 +26,7 @@
             android:layout_margin="5dp"
             android:layout_gravity="center"
             android:textColor="@color/bg_light"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -35,7 +36,7 @@
             android:layout_margin="5dp"
             android:textColor="@color/white"
             android:text="Scan"
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/scan_it"/>
 
     </LinearLayout>
@@ -48,6 +49,7 @@
         android:textColor="@color/white"
         android:backgroundTint="@color/bg_light"
         android:textSize="20sp"
+        android:inputType="number"
         android:textColorHint="@color/bg_light"
         android:id="@+id/itm_qnt"/>
 

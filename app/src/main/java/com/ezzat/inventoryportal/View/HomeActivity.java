@@ -1,31 +1,46 @@
 package com.ezzat.inventoryportal.View;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.ezzat.inventoryportal.Controller.publicMethods;
+import com.ezzat.inventoryportal.Model.Item;
+import com.ezzat.inventoryportal.Model.Items;
+import com.ezzat.inventoryportal.Model.User;
 import com.ezzat.inventoryportal.R;
+
+import java.util.concurrent.Callable;
 
 public class HomeActivity extends AppCompatActivity {
 
     private Button checkOut;
     private Button ret;
     private Button create;
-    private String userId;
+    private Items items;
+    private User user;
+    private Context self;
+    private publicMethods pub;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        self = this;
+        pub = new publicMethods();
         setContentView(R.layout.activity_home);
-        userId = getIntent().getStringExtra("id");
+        items = (Items) getIntent().getSerializableExtra("items");
+        user = (User) getIntent().getSerializableExtra("user");
         checkOut = findViewById(R.id.ch_o);
         ret = findViewById(R.id.returnIt);
         create = findViewById(R.id.create);
@@ -45,7 +60,9 @@ public class HomeActivity extends AppCompatActivity {
         ret.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goTo(ReturnActivity.class);
+                String title = "Search Ite,";
+                String desc = "Enter Item ID : ";
+                pub.showMyDialogReturn(title, desc, self, items, user);
             }
         });
 
@@ -59,7 +76,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void goTo(Class activityClass) {
         Intent intent = new Intent(HomeActivity.this, activityClass);
-        intent.putExtra("id", userId);
+        intent.putExtra("user", user);
+        intent.putExtra("items", items);
         startActivity(intent);
     }
 
@@ -91,7 +109,7 @@ public class HomeActivity extends AppCompatActivity {
                             public void onAnimationEnd(Animator animation) {
                                 create.animate()
                                         .translationX(0)
-                                        .setDuration(1000);
+                                        .setDuration(300);
                             }
 
                             @Override
@@ -104,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
 
                             }
                         })
-                        .setDuration(1000);
+                        .setDuration(300);
                     }
 
                     @Override
@@ -117,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     }
                 })
-                .setDuration(1000);
+                .setDuration(300);
     }
 
     private void setupToolbar() {

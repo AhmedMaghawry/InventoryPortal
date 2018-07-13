@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import com.ezzat.inventoryportal.Controller.publicMethods;
+import com.ezzat.inventoryportal.Model.Items;
+import com.ezzat.inventoryportal.Model.Users;
 import com.ezzat.inventoryportal.R;
 import com.ezzat.inventoryportal.Controller.cameraClasses.BaseScannerActivity;
 import com.ezzat.inventoryportal.Controller.cameraClasses.CameraSelectorDialogFragment;
@@ -40,9 +42,14 @@ public class camActivity extends BaseScannerActivity implements MessageDialogFra
     private boolean mAutoFocus;
     private ArrayList<Integer> mSelectedIndices;
     private int mCameraId = -1;
+    private Users users;
+    private Items items;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        users = (Users) getIntent().getSerializableExtra("users");
+        items = (Items) getIntent().getSerializableExtra("items");
         if(savedInstanceState != null) {
             mFlash = savedInstanceState.getBoolean(FLASH_STATE, false);
             mAutoFocus = savedInstanceState.getBoolean(AUTO_FOCUS_STATE, true);
@@ -152,10 +159,11 @@ public class camActivity extends BaseScannerActivity implements MessageDialogFra
             Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
             r.play();
         } catch (Exception e) {}
-        Boolean val = new publicMethods().searchInXSL(rawResult.getText());
-        if (val) {
+        if (users.checkUser(rawResult.getText())) {
             Intent intent = new Intent(camActivity.this, PasswordActivity.class);
-            intent.putExtra("id", rawResult.getText());
+            //intent.putExtra("id", rawResult.getText());
+            intent.putExtra("user", users.getUser(rawResult.getText()));
+            intent.putExtra("items", items);
             startActivity(intent);
             finish();
         } else {

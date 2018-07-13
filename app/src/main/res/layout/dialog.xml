@@ -26,6 +26,7 @@
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:textColor="@color/white"
+        android:inputType="number"
         android:backgroundTint="@color/bg_light"
         android:textCursorDrawable="@null"
         android:textSize="20sp"
