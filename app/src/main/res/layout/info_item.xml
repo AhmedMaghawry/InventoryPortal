@@ -58,7 +58,6 @@
         android:layout_height="40dp"
         android:id="@+id/line"
         android:layout_margin="20dp"
-
         android:spinnerMode="dialog"
         android:prompt="@string/line"/>
 

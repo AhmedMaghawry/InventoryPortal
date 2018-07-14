@@ -62,9 +62,11 @@ public class ReturnActivity extends AppCompatActivity {
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                items.updateItemID(item.getItemNumber(), itemNum.getText().toString(), getApplicationContext());
-                items.saveItems(getApplicationContext());
-                goToHome();
+                boolean b = items.updateItemID(item.getItemNumber(), itemNum.getText().toString(), getApplicationContext());
+                if (b) {
+                    items.saveItems(getApplicationContext());
+                    goToHome();
+                }
             }
         });
     }

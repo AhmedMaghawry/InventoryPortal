@@ -66,8 +66,8 @@ public class Items implements Serializable {
         return null;
     }
 
-    public void updateItemID(String id, String newId, Context context) {
-        if (getItem(newId) != null) {
+    public boolean updateItemID(String id, String newId, Context context) {
+        if (getItem(newId) == null) {
             Log.i("dodi", id + " IDDD");
             for (int i = 0; i < items.size(); i++) {
                 Log.i("dodi", "search now " + items.get(i).getItemNumber());
@@ -78,8 +78,10 @@ public class Items implements Serializable {
                     break;
                 }
             }
+            return true;
         } else {
             Toast.makeText(context, "There is the same id before", Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 
@@ -143,7 +145,9 @@ public class Items implements Serializable {
                             default:
                         }
                     }
-                    Item item = new Item(num, des, qua, lineMach != null && lineMach.length() > 0? lineMach.substring(0,2) : "", lineMach != null && lineMach.length() > 0 ? lineMach.substring(2) : "", cat);
+                    String line = getLine(lineMach);
+                    String machine = getMachine(lineMach);
+                    Item item = new Item(num, des, qua, line, machine, cat);
                     String json = gson.toJson(item);
                     editor.putString(r+"", json);
                     items.add(item);
@@ -165,6 +169,26 @@ public class Items implements Serializable {
         }
     }
 
+    private String getLine(String lineMach) {
+        if (lineMach == null)
+            return "";
+        if (lineMach.length() > 0 && lineMach.length() <= 3)
+            return lineMach.substring(0,2);
+        else if (lineMach.length() > 3)
+            return lineMach;
+        else
+            return "";
+    }
+
+    private String getMachine(String lineMach) {
+        if (lineMach == null)
+            return "";
+        if (lineMach.length() == 3)
+            return lineMach.substring(2);
+        else
+            return "";
+    }
+
     public void saveItems(Context context){
         SharedPreferences pref = context.getSharedPreferences("items", 0);
         Gson gson = new Gson();
@@ -176,6 +200,17 @@ public class Items implements Serializable {
             counter++;
         }
         editor.putInt("size", items.size());
+        editor.commit(); // commit changes
+    }
+
+    public void saveItemForCheckOut(Context context, Item item){
+        SharedPreferences pref = context.getSharedPreferences("check", 0);
+        Gson gson = new Gson();
+        SharedPreferences.Editor editor = pref.edit();
+        int counter = pref.getInt("checksize", -1);
+        String json = gson.toJson(item);
+        editor.putString((counter+1)+"", json);
+        editor.putInt("checksize", counter+1);
         editor.commit(); // commit changes
     }
 
@@ -219,7 +254,7 @@ public class Items implements Serializable {
 // set the type to 'email'
         //vnd.android.cursor.dir/email
         emailIntent .setType("text/plain");
-        String to[] = {"a.maghawry25@gmail.com"};
+        String to[] = {"foxracer1869@gmail.com"};
         emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
 // the attachment
         emailIntent .putExtra(Intent.EXTRA_STREAM, path);
@@ -261,4 +296,25 @@ public class Items implements Serializable {
         }
         return value;
     }
+
+    public ArrayList<String> getLines() {
+        Set<String> res = new HashSet<>();
+        for (Item i : items) {
+            if (i == null || i.getLine().equals(""))
+                continue;
+            res.add(i.getLine());
+        }
+        return new ArrayList<String>(res);
+    }
+
+    public ArrayList<String> getMachines() {
+        Set<String> res = new HashSet<>();
+        for (Item i : items) {
+            if (i == null || i.getMach().equals(""))
+                continue;
+            res.add(i.getMach());
+        }
+        return new ArrayList<String>(res);
+    }
+
 }

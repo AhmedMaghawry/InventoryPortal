@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -79,8 +80,8 @@ public class CreateAvtivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_avtivity);
         user = (User) getIntent().getSerializableExtra("user");
         items = (Items) getIntent().getSerializableExtra("items");
-        getPaths();
         setupViews();
+        getPaths();
         setupActions();
         setupToolbar();
         Item item = (Item) getIntent().getSerializableExtra("item");
@@ -213,9 +214,14 @@ public class CreateAvtivity extends AppCompatActivity {
     }
 
     public void getPaths() {
-        //Todo : GEt it Dynamic
-        lines = new String[]{qLine,"A1","A2","A3","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3"};
-        machines = new String[]{qMachine,"A","B","C","D","E"};
+        ArrayList<String> linesArr = items.getLines();
+        linesArr.add(0, qLine);
+        lines = new String[linesArr.size()];
+        lines = linesArr.toArray(lines);
+        ArrayList<String> machinesArr = items.getMachines();
+        machinesArr.add(0, qMachine);
+        machines = new String[machinesArr.size()];
+        machines = machinesArr.toArray(machines);
     }
 
     private void setupToolbar() {
@@ -300,13 +306,13 @@ public class CreateAvtivity extends AppCompatActivity {
                 Cell cell = head.createCell(i);
                 cell.setCellValue(cols[i]);
             }
-                Row row = sheet.createRow(1);
-                row.createCell(0).setCellValue(itemNum.getText().toString());
-                row.createCell(1).setCellValue(itemQuan.getText().toString());
-                row.createCell(2).setCellValue(line.getSelectedItem().toString());
-                row.createCell(3).setCellValue(machine.getSelectedItem().toString());
-                row.createCell(4).setCellValue(desc.getText().toString());
-                row.createCell(5).setCellValue(catalog.getText().toString());
+            Row row = sheet.createRow(1);
+            row.createCell(0).setCellValue(itemNum.getText().toString());
+            row.createCell(1).setCellValue(itemQuan.getText().toString());
+            row.createCell(2).setCellValue(line.getSelectedItem().toString());
+            row.createCell(3).setCellValue(machine.getSelectedItem().toString());
+            row.createCell(4).setCellValue(desc.getText().toString());
+            row.createCell(5).setCellValue(catalog.getText().toString());
 
             String filename="res.xlsx";
             File filelocation = new File(getExternalCacheDir(), filename);
@@ -322,17 +328,17 @@ public class CreateAvtivity extends AppCompatActivity {
             }
             Uri path = Uri.fromFile(filelocation);
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
-// set the type to 'email'
+            // set the type to 'email'
             //vnd.android.cursor.dir/email
             emailIntent .setType("text/plain");
-            String to[] = {"a.maghawry25@gmail.com"};
+            String to[] = {"foxracer1869@gmail.com"};
             emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
-// the attachment
+            // the attachment
             emailIntent .putExtra(Intent.EXTRA_STREAM, path);
-// the mail subject
+            // the mail subject
             emailIntent .putExtra(Intent.EXTRA_SUBJECT, "Results");
-            startActivity(Intent.createChooser(emailIntent , "Send email..."));
             items.saveItems(getApplicationContext());
+            startActivityForResult(Intent.createChooser(emailIntent , "Send email..."), 1);
             return null;
         }
 
@@ -342,12 +348,15 @@ public class CreateAvtivity extends AppCompatActivity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
-            Intent intent = new Intent(CreateAvtivity.this, HomeActivity.class);
-            intent.putExtra("user", user);
-            intent.putExtra("items", items);
-            startActivityForResult(intent,1);
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent intent = new Intent(CreateAvtivity.this, HomeActivity.class);
+        intent.putExtra("user", user);
+        intent.putExtra("items", items);
+        startActivity(intent);
+    }
 }
