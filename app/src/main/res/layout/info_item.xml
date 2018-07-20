@@ -14,10 +14,10 @@
             android:layout_margin="10dp"
             android:hint="Enter Item Number ..."
             android:textColor="@color/white"
-            android:backgroundTint="@color/bg_light"
+            android:backgroundTint="@color/textC"
             android:textSize="20sp"
             android:inputType="number"
-            android:textColorHint="@color/bg_light"
+            android:textColorHint="@color/textC"
             android:id="@+id/itm_num"/>
         <TextView
             android:layout_width="wrap_content"
@@ -25,14 +25,14 @@
             android:text="@string/tv_or"
             android:layout_margin="5dp"
             android:layout_gravity="center"
-            android:textColor="@color/bg_light"
+            android:textColor="@color/textC"
             android:visibility="visible"/>
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/btn_bg_light"
+            android:background="@drawable/bg_buttons"
             android:layout_margin="5dp"
             android:textColor="@color/white"
             android:text="Scan"
@@ -47,10 +47,10 @@
         android:layout_margin="20dp"
         android:hint="Enter Quantity Added ..."
         android:textColor="@color/white"
-        android:backgroundTint="@color/bg_light"
+        android:backgroundTint="@color/textC"
         android:textSize="20sp"
         android:inputType="number"
-        android:textColorHint="@color/bg_light"
+        android:textColorHint="@color/textC"
         android:id="@+id/itm_qnt"/>
 
     <Spinner

@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg_ylo"
+    android:background="@color/backG"
     tools:context=".View.CreateAvtivity">
 
     <android.support.v7.widget.Toolbar
@@ -24,11 +24,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/bt_cr"
-        android:textColor="@color/bg_light"
+        android:text="Material Request"
+        android:textColor="@color/textC"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:textSize="50sp"/>
+        android:textSize="30sp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -36,9 +36,9 @@
         android:layout_margin="10dp"
         android:hint="Enter Company Name ..."
         android:textColor="@color/white"
-        android:backgroundTint="@color/bg_light"
+        android:backgroundTint="@color/textC"
         android:textSize="20sp"
-        android:textColorHint="@color/bg_light"
+        android:textColorHint="@color/textC"
         android:id="@+id/cmp_name"/>
 
     <include layout="@layout/info_item"/>
@@ -49,9 +49,9 @@
         android:layout_margin="10dp"
         android:hint="Why / Description ..."
         android:textColor="@color/white"
-        android:backgroundTint="@color/bg_light"
+        android:backgroundTint="@color/textC"
         android:textSize="20sp"
-        android:textColorHint="@color/bg_light"
+        android:textColorHint="@color/textC"
         android:id="@+id/dsc"/>
 
     <EditText
@@ -60,9 +60,9 @@
         android:layout_margin="10dp"
         android:hint="Enter Catalog Number ..."
         android:textColor="@color/white"
-        android:backgroundTint="@color/bg_light"
+        android:backgroundTint="@color/textC"
         android:textSize="20sp"
-        android:textColorHint="@color/bg_light"
+        android:textColorHint="@color/textC"
         android:id="@+id/cat_num"/>
 
     <include layout="@layout/buttons_views"/>

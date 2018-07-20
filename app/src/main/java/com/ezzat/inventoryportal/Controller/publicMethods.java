@@ -8,18 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ezzat.inventoryportal.Model.Item;
 import com.ezzat.inventoryportal.Model.Items;
 import com.ezzat.inventoryportal.Model.User;
 import com.ezzat.inventoryportal.Model.Users;
 import com.ezzat.inventoryportal.R;
-import com.ezzat.inventoryportal.View.HomeActivity;
 import com.ezzat.inventoryportal.View.PasswordActivity;
 import com.ezzat.inventoryportal.View.ReturnActivity;
-
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
+import com.ezzat.inventoryportal.View.camHomeActivity;
 
 public class publicMethods {
 
@@ -84,6 +82,16 @@ public class publicMethods {
         TextView text = dialog.findViewById(R.id.desc_tv);
         text.setText(desc);
         final EditText editText = dialog.findViewById(R.id.input_et);
+        TextView or = dialog.findViewById(R.id.or);
+        or.setVisibility(View.VISIBLE);
+        Button scan = dialog.findViewById(R.id.scan_it);
+        scan.setVisibility(View.VISIBLE);
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTheCam(context, id, items);
+            }
+        });
         editText.setHint(title + " ...");
 
         Button dialogCan = dialog.findViewById(R.id.cancel);
@@ -119,6 +127,50 @@ public class publicMethods {
         });
 
         dialog.show();
+    }
+
+    public void showMyDialogDesc(Item item, final Context context) {
+        // custom dialog
+        if (item != null) {
+            final Dialog dialog = new Dialog(context);
+            dialog.setContentView(R.layout.dialog_desc);
+            dialog.setTitle("Description");
+            TextView itemNum = dialog.findViewById(R.id.item);
+            TextView quantity = dialog.findViewById(R.id.quan);
+            TextView decrp = dialog.findViewById(R.id.desc);
+            TextView bin = dialog.findViewById(R.id.bin);
+            TextView cat = dialog.findViewById(R.id.cat);
+            Button ok = dialog.findViewById(R.id.ok);
+
+            itemNum.setText(item.getItemNumber());
+            quantity.setText(item.getQuan());
+            decrp.setText(item.getDesc());
+            bin.setText(item.getBin());
+            cat.setText(item.getCatalog());
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        } else {
+            Toast.makeText(context, "Invalid Item", Toast.LENGTH_LONG);
+        }
+    }
+
+    public void startTheCam(Context context, User user, Items items) {
+        startAc(camHomeActivity.class, context, user, items);
+    }
+
+    private Class<?> mClss;
+
+    public void startAc(Class<?> cls, Context context, User user, Items items){
+            Intent intent = new Intent(context, cls);
+            intent.putExtra("user", user);
+            intent.putExtra("items", items);
+            intent.putExtra("create", 2);
+            context.startActivity(intent);
     }
 
 }

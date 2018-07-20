@@ -80,7 +80,7 @@ public class Items implements Serializable {
             }
             return true;
         } else {
-            Toast.makeText(context, "There is the same id before", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "There is the same id before", Toast.LENGTH_LONG).show();
             return false;
         }
     }
@@ -207,7 +207,7 @@ public class Items implements Serializable {
         SharedPreferences pref = context.getSharedPreferences("check", 0);
         Gson gson = new Gson();
         SharedPreferences.Editor editor = pref.edit();
-        int counter = pref.getInt("checksize", -1);
+        int counter = pref.getInt("checksize", 0);
         String json = gson.toJson(item);
         editor.putString((counter+1)+"", json);
         editor.putInt("checksize", counter+1);
@@ -216,7 +216,7 @@ public class Items implements Serializable {
 
     public void generateXLS_and_send(Items items, Context context) {
         Workbook workbook = new XSSFWorkbook();
-        String[] cols = {"Item#", "Quantity", "Line", "Machine", "Date"};
+        String[] cols = {"ID", "Item#", "Quantity", "Line", "Machine", "Date"};
         Sheet sheet = workbook.createSheet("Check Out");
         Row head = sheet.createRow(0);
         for (int i = 0; i < cols.length; i++) {
@@ -227,17 +227,15 @@ public class Items implements Serializable {
         int rowNum = 1;
         for (Item ite : items.getItems()) {
             Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(ite.getItemNumber());
-            row.createCell(1).setCellValue(ite.getQuan());
-            row.createCell(2).setCellValue(ite.getLine());
-            row.createCell(3).setCellValue(ite.getMach());
-            Date c = Calendar.getInstance().getTime();
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            String formattedDate = df.format(c);
-            row.createCell(4).setCellValue(formattedDate);
+            row.createCell(0).setCellValue(rowNum-1);
+            row.createCell(1).setCellValue(ite.getItemNumber());
+            row.createCell(2).setCellValue(ite.getQuan());
+            row.createCell(3).setCellValue(ite.getLine());
+            row.createCell(4).setCellValue(ite.getMach());
+            row.createCell(5).setCellValue(ite.getCatalog());
         }
 
-        String filename="res.xlsx";
+        String filename="report.xlsx";
         File filelocation = new File(context.getExternalCacheDir(), filename);
         FileOutputStream fileOutputStream;
         try {

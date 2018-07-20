@@ -45,14 +45,14 @@ public class camHomeActivity extends BaseScannerActivity implements MessageDialo
     private int mCameraId = -1;
     private User user;
     private Items items;
-    private boolean create = true;
+    private int create = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         user = (User) getIntent().getSerializableExtra("user");
         items = (Items) getIntent().getSerializableExtra("items");
-        create = getIntent().getBooleanExtra("create", true);
+        create = getIntent().getIntExtra("create", 0);
         if(savedInstanceState != null) {
             mFlash = savedInstanceState.getBoolean(FLASH_STATE, false);
             mAutoFocus = savedInstanceState.getBoolean(AUTO_FOCUS_STATE, true);
@@ -164,8 +164,7 @@ public class camHomeActivity extends BaseScannerActivity implements MessageDialo
         } catch (Exception e) {}
         Item item = items.getItem(rawResult.getText());
         if (item != null) {
-            Intent intent = new Intent(camHomeActivity.this, (create)? CreateAvtivity.class : CheckOutActivity.class);
-            //intent.putExtra("id", rawResult.getText());
+            Intent intent = new Intent(camHomeActivity.this, (create == 0)? CreateAvtivity.class : (create == 1)?CheckOutActivity.class : ReturnActivity.class);
             intent.putExtra("user", user);
             intent.putExtra("items", items);
             intent.putExtra("item", item);

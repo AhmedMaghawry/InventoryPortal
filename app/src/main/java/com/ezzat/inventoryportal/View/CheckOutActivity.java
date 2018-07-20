@@ -3,6 +3,7 @@ package com.ezzat.inventoryportal.View;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -29,10 +30,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ezzat.inventoryportal.Model.CheckItem;
 import com.ezzat.inventoryportal.Model.Item;
 import com.ezzat.inventoryportal.Model.Items;
 import com.ezzat.inventoryportal.Model.User;
 import com.ezzat.inventoryportal.R;
+import com.google.gson.Gson;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -46,6 +49,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -159,8 +163,7 @@ public class CheckOutActivity extends AppCompatActivity {
                 Date c = Calendar.getInstance().getTime();
                 SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = df.format(c);
-                //TODO : What to do ?
-                //new uploadCheck().execute(itmID, quan, lineNum, machNum, formattedDate);
+                new uploadCheck().execute(itmID, quan, lineNum, machNum, formattedDate);
             }
         });
 
@@ -191,9 +194,14 @@ public class CheckOutActivity extends AppCompatActivity {
     }
 
     public void getPaths() {
-        //Todo : GEt it Dynamic
-        lines = new String[]{qLine,"A1","A2","A3","B1","B2","B3","C1","C2","C3","D1","D2","D3","E1","E2","E3"};
-        machines = new String[]{qMachine,"A","B","C","D","E"};
+        ArrayList<String> linesArr = items.getLines();
+        linesArr.add(0, qLine);
+        lines = new String[linesArr.size()];
+        lines = linesArr.toArray(lines);
+        ArrayList<String> machinesArr = items.getMachines();
+        machinesArr.add(0, qMachine);
+        machines = new String[machinesArr.size()];
+        machines = machinesArr.toArray(machines);
     }
 
     private void setupToolbar() {
@@ -227,7 +235,7 @@ public class CheckOutActivity extends AppCompatActivity {
             Intent intent = new Intent(this, cls);
             intent.putExtra("user", user);
             intent.putExtra("items", items);
-            intent.putExtra("create", false);
+            intent.putExtra("create", 1);
             startActivity(intent);
         }
     }
@@ -248,9 +256,8 @@ public class CheckOutActivity extends AppCompatActivity {
         }
     }
 
-    /*class uploadCheck extends AsyncTask<String, String, String> {
+    class uploadCheck extends AsyncTask<String, String, String> {
         AlertDialog alertDialog;
-        boolean finished = true;
 
         @Override
         protected void onPreExecute() {
@@ -266,41 +273,14 @@ public class CheckOutActivity extends AppCompatActivity {
         }
 
         protected String doInBackground(String... args) {
-            InputStream stream = getResources().openRawResource(R.raw.test1);
-            if (items.getItem(args[0]) != null) {
-                try {
-                    XSSFWorkbook workbook = new XSSFWorkbook(stream);
-                    XSSFSheet sheet = workbook.getSheetAt(1);
-                    Row row = sheet.createRow(items.getItems().size());
-                    Cell cellId = row.createCell(0);
-                    Cell cellqua = row.createCell(1);
-                    Cell cellline = row.createCell(2);
-                    Cell cellMach = row.createCell(3);
-                    Cell cellDate = row.createCell(4);
-                    cellId.setCellValue(args[0]);
-                    cellqua.setCellValue(args[1]);
-                    cellline.setCellValue(args[2]);
-                    cellMach.setCellValue(args[3]);
-                    cellDate.setCellValue(args[4]);
-                } catch (ArithmeticException e) {
-                    //printlnToUser(e.toString());
-                    e.printStackTrace();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    Log.i("errorDodo", "File");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.i("errorDodo", "IO");
-                }
-            } else {
-                finished = false;
-                alertDialog.setMessage("There is no the same id");
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        alertDialog.show();
-                    }
-                });
-            }
+            SharedPreferences pref = getApplication().getSharedPreferences("check", 0);
+            Gson gson = new Gson();
+            SharedPreferences.Editor editor = pref.edit();
+            int counter = pref.getInt("checksize", 0);
+            String json = gson.toJson(new CheckItem(args[0], args[1], args[2], args[3], args[4]));
+            editor.putString((counter+1)+"", json);
+            editor.putInt("checksize", counter+1);
+            editor.commit(); // commit changes
             return null;
         }
 
@@ -308,9 +288,8 @@ public class CheckOutActivity extends AppCompatActivity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
-            if (finished) {
-                goToHome();
-            }
+            Toast.makeText(getApplicationContext(), "The item has been successfully added", Toast.LENGTH_LONG).show();
+            goToHome();
         }
-    }*/
+    }
 }

@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.ezzat.inventoryportal.Controller.cameraClasses.MessageDialogFragment;
 import com.ezzat.inventoryportal.Model.Items;
 import com.ezzat.inventoryportal.Model.User;
@@ -46,6 +48,7 @@ public class PasswordActivity extends AppCompatActivity implements MessageDialog
                     Intent intent = new Intent(PasswordActivity.this, HomeActivity.class);
                     intent.putExtra("user", user);
                     intent.putExtra("items", items);
+                    Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
                     finish();
                 } else {

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -28,10 +29,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ezzat.inventoryportal.Model.CreateItem;
 import com.ezzat.inventoryportal.Model.Item;
 import com.ezzat.inventoryportal.Model.Items;
 import com.ezzat.inventoryportal.Model.User;
 import com.ezzat.inventoryportal.R;
+import com.google.gson.Gson;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
@@ -177,7 +180,7 @@ public class CreateAvtivity extends AppCompatActivity {
                 String formattedDate = df.format(c);*/
                 if (items.getItem(itmID) == null) {
                     items.addItem(new Item(itmID, de, quan, lineNum, machNum, cata));
-                    new uploadItems().execute();
+                    new uploadCreate().execute(itmID, de, quan, lineNum, machNum, cata, compN);
                 } else {
                     Toast.makeText(getApplicationContext(), "There is the same item", Toast.LENGTH_LONG).show();
                 }
@@ -255,7 +258,7 @@ public class CreateAvtivity extends AppCompatActivity {
             Intent intent = new Intent(this, cls);
             intent.putExtra("user", user);
             intent.putExtra("items", items);
-            intent.putExtra("create", true);
+            intent.putExtra("create", 0);
             startActivity(intent);
         }
     }
@@ -276,11 +279,10 @@ public class CreateAvtivity extends AppCompatActivity {
         }
     }
 
-    class uploadItems extends AsyncTask<String, String, String> {
+
+    class uploadCreate extends AsyncTask<String, String, String> {
         AlertDialog alertDialog;
-        /**
-         * Before starting background thread Show Progress Dialog
-         * */
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -294,69 +296,27 @@ public class CreateAvtivity extends AppCompatActivity {
             pDialog.show();
         }
 
-        /**
-         * getting All products from url
-         * */
         protected String doInBackground(String... args) {
-            Workbook workbook = new XSSFWorkbook();
-            String[] cols = {"Company Name", "Quantity", "Line", "Machine", "Description", "Catalog"};
-            Sheet sheet = workbook.createSheet("Check Out");
-            Row head = sheet.createRow(0);
-            for (int i = 0; i < cols.length; i++) {
-                Cell cell = head.createCell(i);
-                cell.setCellValue(cols[i]);
-            }
-            Row row = sheet.createRow(1);
-            row.createCell(0).setCellValue(itemNum.getText().toString());
-            row.createCell(1).setCellValue(itemQuan.getText().toString());
-            row.createCell(2).setCellValue(line.getSelectedItem().toString());
-            row.createCell(3).setCellValue(machine.getSelectedItem().toString());
-            row.createCell(4).setCellValue(desc.getText().toString());
-            row.createCell(5).setCellValue(catalog.getText().toString());
-
-            String filename="res.xlsx";
-            File filelocation = new File(getExternalCacheDir(), filename);
-            FileOutputStream fileOutputStream;
-            try {
-                fileOutputStream = new FileOutputStream(filelocation);
-                workbook.write(fileOutputStream);
-                fileOutputStream.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Uri path = Uri.fromFile(filelocation);
-            Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            // set the type to 'email'
-            //vnd.android.cursor.dir/email
-            emailIntent .setType("text/plain");
-            String to[] = {"foxracer1869@gmail.com"};
-            emailIntent .putExtra(Intent.EXTRA_EMAIL, to);
-            // the attachment
-            emailIntent .putExtra(Intent.EXTRA_STREAM, path);
-            // the mail subject
-            emailIntent .putExtra(Intent.EXTRA_SUBJECT, "Results");
-            items.saveItems(getApplicationContext());
-            startActivityForResult(Intent.createChooser(emailIntent , "Send email..."), 1);
+            SharedPreferences pref = getApplication().getSharedPreferences("create", 0);
+            Gson gson = new Gson();
+            SharedPreferences.Editor editor = pref.edit();
+            int counter = pref.getInt("createsize", 0);
+            Date c = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            String formattedDate = df.format(c);
+            String json = gson.toJson(new CreateItem(args[0],args[1], args[2], args[3], args[4], args[5], args[6], formattedDate));
+            editor.putString((counter+1)+"", json);
+            editor.putInt("createsize", counter+1);
+            editor.commit(); // commit changes
             return null;
         }
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
+
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "The item has been successfully created", Toast.LENGTH_LONG).show();
+            goToHome();
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Intent intent = new Intent(CreateAvtivity.this, HomeActivity.class);
-        intent.putExtra("user", user);
-        intent.putExtra("items", items);
-        startActivity(intent);
     }
 }

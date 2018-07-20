@@ -2,5 +2,6 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="10sp"
-    android:textColor="@color/bg_light" />
+    android:textSize="20sp"
+    android:textColor="@color/textC"
+    android:background="@color/trns"/>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_rd"
+    android:background="@color/backG"
     android:orientation="vertical"
     tools:context=".View.ReturnActivity">
 
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bt_ret"
-        android:textColor="@color/bg_light"
+        android:textColor="@color/textC"
         android:textStyle="bold"
         android:layout_gravity="center"
         android:textSize="50sp"/>
@@ -35,19 +35,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="The Quantity  : "
-            android:textColor="@color/bg_light"
+            android:textColor="@color/textC"
             android:layout_gravity="center"
+            android:gravity="center"
             android:textSize="20sp"
             android:layout_margin="20dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:text="@string/dumy"
-            android:textColor="@color/bg_light"
-            android:layout_gravity="center"
-            android:textSize="20sp"
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:hint="Enter Quantity..."
+            android:textColorHint="@color/textC"
             android:layout_margin="20dp"
+            android:textColor="@color/textC"
+            android:inputType="number"
+            android:padding="10dp"
             android:id="@+id/qn"/>
     </LinearLayout>
 
@@ -56,9 +59,9 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:hint="@string/btn_item_id"
-        android:textColorHint="@color/bg_light"
+        android:textColorHint="@color/textC"
         android:layout_margin="20dp"
-        android:textColor="@color/bg_light"
+        android:textColor="@color/textC"
         android:padding="10dp"
         android:id="@+id/itm"/>
 
@@ -71,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="The Bin location  : "
-            android:textColor="@color/bg_light"
+            android:textColor="@color/textC"
             android:layout_gravity="center"
             android:textSize="20sp"
             android:layout_margin="20dp"/>
@@ -80,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             tools:text="@string/dumy"
-            android:textColor="@color/bg_light"
+            android:textColor="@color/textC"
             android:layout_gravity="center"
             android:textSize="20sp"
             android:layout_margin="20dp"

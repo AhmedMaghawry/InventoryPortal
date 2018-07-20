@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backG"
     android:orientation="vertical"
-    tools:context=".View.CheckOutActivity">
-
+    tools:context=".View.CartActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_gravity="top"
@@ -17,17 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bt_ch_o"
-        android:textColor="@color/textC"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:textSize="50sp"/>
-
-    <include layout="@layout/info_item"/>
-
-    <include layout="@layout/buttons_views"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:id="@+id/list"/>
 
 </LinearLayout>
